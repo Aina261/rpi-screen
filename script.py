@@ -1,39 +1,35 @@
+import board
 import time
 import socket
 import os
 import shutil
 import psutil
 
-import Adafruit_SSD1306
+import adafruit_ssd1306
 
-from PIL import Image
-from PIL import ImageDraw
+from PIL import Image, ImageDraw
 
 RST = None
 DC = 23
 SPI_PORT = 0
 SPI_DEVICE = 0
+WIDTH = 128
+HEIGHT = 64
 
-display = Adafruit_SSD1306.SSD1306_128_64(rst=RST)
-
-display.begin()
-display.clear()
-display.display()
-width = display.width
-height = display.height
-image = Image.new("1", (width, height))
-
+i2c = board.I2C()
+oled = adafruit_ssd1306.SSD1306_I2C(WIDTH, HEIGHT, i2c, addr=0x3C)
+oled.fill(0)
+oled.show()
+image = Image.new("1", (oled.width, oled.height))
 draw = ImageDraw.Draw(image)
-draw.rectangle((0, 0, width, height), outline=0, fill=0)
+draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
 
 padding = -2
 top = padding
-bottom = height - padding
+bottom = oled.height - padding
 x = 0
 
 while True:
-    display.clear()
-    display.display()
     hdd_total, hdd_used, hdd_free = shutil.disk_usage("/")
 
     hostname = str(socket.gethostname())
@@ -58,6 +54,6 @@ while True:
         fill=255,
     )
 
-    display.image(image)
-    display.display()
+    oled.image(image)
+    oled.show()
     time.sleep(1)
