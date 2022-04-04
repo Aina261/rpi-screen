@@ -30,6 +30,7 @@ bottom = oled.height - padding
 x = 0
 
 while True:
+    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
     hdd_total, hdd_used, hdd_free = shutil.disk_usage("/")
 
     hostname = str(socket.gethostname())
@@ -56,4 +57,4 @@ while True:
 
     oled.image(image)
     oled.show()
-    time.sleep(1)
+    time.sleep(.1)
