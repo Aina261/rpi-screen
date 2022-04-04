@@ -43,18 +43,15 @@ while True:
 
     draw.text((x, top), f"Host: {hostname}", fill=255)
     draw.text((x, top + 10), f"Ip: {ip}", fill=255)
+    draw.text((x, top + 20), f"Cpu: {cpu_percent}%", fill=255)
+    draw.text((x, top + 30), f"Cpu Temp: {cpu_temp}°c", fill=255)
+    draw.text((x, top + 40), f"Ram: {ram_percent}%", fill=255)
     draw.text(
-        (x, top + 20),
-        f"Cpu: {cpu_percent}% | Temp: {cpu_temp}°c",
-        fill=255,
-    )
-    draw.text((x, top + 30), f"Ram: {ram_percent}%", fill=255)
-    draw.text(
-        (x, top + 40),
+        (x, top + 50),
         f"Disk: {hdd_used_formatted}/{hdd_total_formatted} G",
         fill=255,
     )
 
     oled.image(image)
     oled.show()
-    time.sleep(.5)
+    time.sleep(1)
