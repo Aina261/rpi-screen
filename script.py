@@ -57,4 +57,4 @@ while True:
 
     oled.image(image)
     oled.show()
-    time.sleep(.1)
+    time.sleep(.5)
