@@ -1,3 +1,4 @@
+import atexit
 import board
 import time
 import socket
@@ -29,6 +30,13 @@ top = padding
 bottom = oled.height - padding
 x = 0
 
+def exit_handler():
+    draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
+    oled.image(image)
+    oled.show()
+atexit.register(exit_handler)
+
+ram_total = str("%.2f" % (psutil.virtual_memory().total / (1024 ** 3)))
 while True:
     draw.rectangle((0, 0, oled.width, oled.height), outline=0, fill=0)
     hdd_total, hdd_used, hdd_free = shutil.disk_usage("/")
@@ -37,21 +45,22 @@ while True:
     ip = str(os.popen("hostname -I").read())[:12]
     cpu_percent = str(psutil.cpu_percent())
     cpu_temp = str("%.2f" % (float(open("/sys/class/thermal/thermal_zone0/temp").read()) / 1000))
-    ram_percent = str(psutil.virtual_memory()[2])
+    ram_percent = str(psutil.virtual_memory().percent)
     hdd_used_formatted = str("%.2f" % (hdd_used / (1024.0**3)))
     hdd_total_formatted = str("%.2f" % (hdd_total / (1024.0**3)))
-
+    
     draw.text((x, top), f"Host: {hostname}", fill=255)
     draw.text((x, top + 10), f"Ip: {ip}", fill=255)
     draw.text((x, top + 20), f"Cpu: {cpu_percent}%", fill=255)
     draw.text((x, top + 30), f"Cpu Temp: {cpu_temp}°c", fill=255)
-    draw.text((x, top + 40), f"Ram: {ram_percent}%", fill=255)
+    draw.text((x, top + 40), f"Ram: {ram_percent}% / {ram_total}g", fill=255)
     draw.text(
         (x, top + 50),
-        f"Disk: {hdd_used_formatted}/{hdd_total_formatted} G",
+        f"Disk: {hdd_used_formatted}g / {hdd_total_formatted}g",
         fill=255,
     )
 
     oled.image(image)
     oled.show()
     time.sleep(1)
+
