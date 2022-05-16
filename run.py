@@ -41,7 +41,7 @@ while True:
     hdd_total, hdd_used, hdd_free = shutil.disk_usage("/")
 
     hostname = str(socket.gethostname())
-    ip = str(os.popen("hostname -I").read())[:12]
+    ip = str(os.popen("hostname -I").read().split(' ')[0])
     cpu_percent = str(psutil.cpu_percent())
     cpu_temp = str("%.2f" % (float(open("/sys/class/thermal/thermal_zone0/temp").read()) / 1000))
     ram_percent = str(psutil.virtual_memory().percent)
