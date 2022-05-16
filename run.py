@@ -5,10 +5,8 @@ import socket
 import os
 import shutil
 import psutil
-from datetime import datetime
-
 import adafruit_ssd1306
-
+from datetime import datetime
 from PIL import Image, ImageDraw
 
 RST = None
@@ -49,19 +47,19 @@ while True:
     ram_percent = str(psutil.virtual_memory().percent)
     hdd_used_formatted = str("%.2f" % (hdd_used / (1024.0**3)))
     hdd_total_formatted = str("%.2f" % (hdd_total / (1024.0**3)))
-    uptime = datetime.fromtimestamp(int(os.popen("date -d "$(who -b | awk '{print $4,$3}' | tr - / )" +%s").read()))
+    uptime = str(os.popen("uptime -p").read()).replace("up ", "").replace("minutes", "m").replace("hours", "h")
     
     draw.text((x, top), f"Host: {hostname}", fill=255)
-    draw.text((x, top + 8), f"Ip: {ip}", fill=255)
-    draw.text((x, top + 16), f"Cpu: {cpu_percent}%", fill=255)
-    draw.text((x, top + 24), f"Cpu Temp: {cpu_temp}°c", fill=255)
-    draw.text((x, top + 32), f"Ram: {ram_percent}% / {ram_total}g", fill=255)
+    draw.text((x, top + 9), f"Ip: {ip}", fill=255)
+    draw.text((x, top + 18), f"Cpu: {cpu_percent}%", fill=255)
+    draw.text((x, top + 27), f"Cpu Temp: {cpu_temp}°c", fill=255)
+    draw.text((x, top + 36), f"Ram: {ram_percent}% / {ram_total}g", fill=255)
     draw.text(
-        (x, top + 40),
+        (x, top + 45),
         f"Disk: {hdd_used_formatted}g / {hdd_total_formatted}g",
         fill=255,
     )
-    draw.text((x, top + 48), f"Uptime: {uptime}")
+    draw.text((x, top + 54), f"Uptime: {uptime}", fill=255)
 
     oled.image(image)
     oled.show()
